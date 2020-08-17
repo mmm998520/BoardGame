@@ -8,6 +8,7 @@ public class Box : MonoBehaviour
     public int value, startled;
     public bool used = false;
     public List<PlayerManager> canSee = new List<PlayerManager>();
+    public List<PlayerManager> canSeeChild = new List<PlayerManager>();
     Transform playerManagers;
 
     void Start()
@@ -25,23 +26,32 @@ public class Box : MonoBehaviour
     {
         for (int i = 0; i < playerManagers.childCount; i++)
         {
-            if (playerManagers.GetChild(i).GetComponent<PlayerManager>().enabled == true)
+            PlayerManager playerManager = playerManagers.GetChild(i).GetComponent<PlayerManager>();
+            if (playerManager.enabled == true)
             {
-                bool CanSee = false;
-                for (int j = 0; j < canSee.Count; j++)
+                MeshRenderer meshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
+                Collider collider = transform.GetComponent<Collider>();
+                SpriteRenderer crossSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+                if (canSee.Contains(playerManager))
                 {
-                    if (playerManagers.GetChild(i).GetComponent<PlayerManager>() == canSee[j])
+                    meshRenderer.enabled = true;
+                    collider.enabled = true;
+                    if (canSeeChild.Contains(playerManager))
                     {
-                        transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
-                        transform.GetComponent<Collider>().enabled = true;
-                        CanSee = true;
-                        break;
+                        crossSpriteRenderer.enabled = true;
+                        collider.enabled = false;
+                    }
+                    else
+                    {
+                        crossSpriteRenderer.enabled = false;
+                        collider.enabled = true;
                     }
                 }
-                if (!CanSee)
+                else
                 {
-                    transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
-                    transform.GetComponent<Collider>().enabled = false;
+                    meshRenderer.enabled = false;
+                    crossSpriteRenderer.enabled = false;
+                    collider.enabled = false;
                 }
                 break;
             }
@@ -52,30 +62,29 @@ public class Box : MonoBehaviour
     {
         for (int i = 0; i < playerManagers.childCount; i++)
         {
-            if (playerManagers.GetChild(i).GetComponent<PlayerManager>().enabled == true)
+            PlayerManager playerManager = playerManagers.GetChild(i).GetComponent<PlayerManager>();
+            if (playerManager.enabled == true)
             {
-                if (playerManagers.GetChild(i).GetComponent<PlayerManager>().action > 0 && playerManagers.GetChild(i).GetComponent<PlayerManager>().equipment.Count < playerManagers.GetChild(i).GetComponent<PlayerManager>().heavyBurden)
+                if (playerManager.action > 0 && playerManager.equipment.Count < playerManager.heavyBurden)
                 {
-                    playerManagers.GetChild(i).GetComponent<PlayerManager>().action--;
+                    playerManager.action--;
                     used = true;
-                    canSee.Remove(playerManagers.GetChild(i).GetComponent<PlayerManager>());
-                    transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
-                    transform.GetComponent<Collider>().enabled = false;
+                    canSeeChild.Add(playerManager);
                     if (value != 0)
                     {
-                        playerManagers.GetChild(i).GetComponent<PlayerManager>().equipment.Add("錢 : " + value);
+                        playerManager.equipment.Add("錢 : " + value);
                     }
-                    playerManagers.GetChild(i).GetComponent<PlayerManager>().scared += startled;
+                    playerManager.scared += startled;
                     Debug.LogWarning("價值 : " + value + " , 被嚇 : " + startled);
                     gameManager.addCollapse(5);
                 }
                 else
                 {
-                    if (playerManagers.GetChild(i).GetComponent<PlayerManager>().action <= 0)
+                    if (playerManager.action <= 0)
                     {
                         Debug.LogError("沒行動了");
                     }
-                    if (playerManagers.GetChild(i).GetComponent<PlayerManager>().equipment.Count >= playerManagers.GetChild(i).GetComponent<PlayerManager>().heavyBurden)
+                    if (playerManager.equipment.Count >= playerManager.heavyBurden)
                     {
                         Debug.LogError("包包滿了");
                     }

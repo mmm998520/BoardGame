@@ -23,41 +23,31 @@ public class Passway : MonoBehaviour
     {
         for (int i = 0; i < playerManagers.childCount; i++)
         {
-            if (playerManagers.GetChild(i).GetComponent<PlayerManager>().enabled == true)
+            PlayerManager playerManager = playerManagers.GetChild(i).GetComponent<PlayerManager>();
+            if (playerManager.enabled == true)
             {
-                bool CanSee = false;
-                for (int j = 0; j < canSee.Count; j++)
+                MeshRenderer meshRenderer = transform.GetComponent<MeshRenderer>();
+                if (canSee.Contains(playerManager))
                 {
-                    if (playerManagers.GetChild(i).GetComponent<PlayerManager>() == canSee[j])
+                    meshRenderer.enabled = true;
+                    if (canSeeChild.Contains(playerManager))
                     {
-                        transform.GetComponent<MeshRenderer>().enabled = true;
-                        CanSee = true;
-                        break;
-                    }
-                }
-                if (CanSee)
-                {
-                    bool CanSeeChild = false;
-                    for (int j = 0; j < canSeeChild.Count; j++)
-                    {
-                        if (playerManagers.GetChild(i).GetComponent<PlayerManager>() == canSeeChild[j])
+                        if (transform.childCount > 0)
                         {
-                            if (transform.childCount > 0)
-                            {
-                                transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
-                                CanSeeChild = true;
-                            }
-                            break;
+                            transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
                         }
                     }
-                    if (!CanSeeChild && transform.childCount > 0)
+                    else
                     {
-                        transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+                        if (transform.childCount > 0)
+                        {
+                            transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+                        }
                     }
                 }
                 else
                 {
-                    transform.GetComponent<MeshRenderer>().enabled = false;
+                    meshRenderer.enabled = false;
                     if (transform.childCount > 0)
                     {
                         transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;

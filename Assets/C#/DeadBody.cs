@@ -7,6 +7,7 @@ public class DeadBody : MonoBehaviour
     public int startled,bullet, expansion, match;
     public bool used = false;
     public List<PlayerManager> canSee = new List<PlayerManager>();
+    public List<PlayerManager> canSeeChild = new List<PlayerManager>();
     Transform playerManagers;
 
     void Start()
@@ -23,23 +24,32 @@ public class DeadBody : MonoBehaviour
     {
         for (int i = 0; i < playerManagers.childCount; i++)
         {
-            if (playerManagers.GetChild(i).GetComponent<PlayerManager>().enabled == true)
+            PlayerManager playerManager = playerManagers.GetChild(i).GetComponent<PlayerManager>();
+            if (playerManager.enabled == true)
             {
-                bool CanSee = false;
-                for(int j = 0; j < canSee.Count; j++)
+                MeshRenderer meshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
+                Collider collider = transform.GetComponent<Collider>();
+                SpriteRenderer crossSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+                if (canSee.Contains(playerManager))
                 {
-                    if (playerManagers.GetChild(i).GetComponent<PlayerManager>() == canSee[j])
+                    meshRenderer.enabled = true;
+                    collider.enabled = true;
+                    if (canSeeChild.Contains(playerManager))
                     {
-                        transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
-                        transform.GetComponent<Collider>().enabled = true;
-                        CanSee = true;
-                        break;
+                        crossSpriteRenderer.enabled = true;
+                        collider.enabled = false;
+                    }
+                    else
+                    {
+                        crossSpriteRenderer.enabled = false;
+                        collider.enabled = true;
                     }
                 }
-                if (!CanSee)
+                else
                 {
-                    transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
-                    transform.GetComponent<Collider>().enabled = false;
+                    meshRenderer.enabled = false;
+                    crossSpriteRenderer.enabled = false;
+                    collider.enabled = false;
                 }
                 break;
             }
@@ -50,35 +60,34 @@ public class DeadBody : MonoBehaviour
     {
         for (int i = 0; i < playerManagers.childCount; i++)
         {
-            if (playerManagers.GetChild(i).GetComponent<PlayerManager>().enabled == true)
+            PlayerManager playerManager = playerManagers.GetChild(i).GetComponent<PlayerManager>();
+            if (playerManager.enabled == true)
             {
-                if (playerManagers.GetChild(i).GetComponent<PlayerManager>().action > 0 && playerManagers.GetChild(i).GetComponent<PlayerManager>().equipment.Count < playerManagers.GetChild(i).GetComponent<PlayerManager>().heavyBurden)
+                if (playerManager.action > 0 && playerManager.equipment.Count < playerManager.heavyBurden)
                 {
-                    playerManagers.GetChild(i).GetComponent<PlayerManager>().action--;
+                    playerManager.action--;
                     used = true;
-                    canSee.Remove(playerManagers.GetChild(i).GetComponent<PlayerManager>());
-                    transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
-                    transform.GetComponent<Collider>().enabled = false;
+                    canSeeChild.Add(playerManager);
                     if (match != 0)
                     {
-                        if (!playerManagers.GetChild(i).GetComponent<PlayerManager>().equipment.Contains("火柴"))
+                        if (!playerManager.equipment.Contains("火柴"))
                         {
-                            playerManagers.GetChild(i).GetComponent<PlayerManager>().equipment.Add("火柴");
+                            playerManager.equipment.Add("火柴");
                         }
                     }
-                    playerManagers.GetChild(i).GetComponent<PlayerManager>().scared += startled;
-                    playerManagers.GetChild(i).GetComponent<PlayerManager>().bullet += bullet;
-                    playerManagers.GetChild(i).GetComponent<PlayerManager>().heavyBurden += expansion;
-                    playerManagers.GetChild(i).GetComponent<PlayerManager>().match += match;
+                    playerManager.scared += startled;
+                    playerManager.bullet += bullet;
+                    playerManager.heavyBurden += expansion;
+                    playerManager.match += match;
                     Debug.LogWarning("被嚇 : " + startled + " , 子彈 : " + bullet + " , 擴充 : " + expansion + " , 火柴 : " + match);
                 }
                 else
                 {
-                    if (playerManagers.GetChild(i).GetComponent<PlayerManager>().action <= 0)
+                    if (playerManager.action <= 0)
                     {
                         Debug.LogError("沒行動了");
                     }
-                    if (playerManagers.GetChild(i).GetComponent<PlayerManager>().equipment.Count >= playerManagers.GetChild(i).GetComponent<PlayerManager>().heavyBurden)
+                    if (playerManager.equipment.Count >= playerManager.heavyBurden)
                     {
                         Debug.LogError("包包滿了");
                     }

@@ -220,87 +220,95 @@ public class PlayerManager : MonoBehaviour
         //加事件
         for (int i = 0; i < temp.childCount; i++)
         {
-            temp.GetChild(i).rotation = Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0));
-            if (temp.GetChild(i).name.Split('(')[0] == "Box")
+            Transform Event = temp.GetChild(i);
+            Event.rotation = Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0));
+            if (Event.name.Split('(')[0] == "Box")
             {
-                if (!temp.GetChild(i).GetComponent<Box>().used)
+                Box box = Event.GetComponent<Box>();
+                if (!box.canSee.Contains(this))
                 {
-                    if (!temp.GetChild(i).GetComponent<Box>().canSee.Contains(this))
-                    {
-                        temp.GetChild(i).GetComponent<Box>().canSee.Add(this);
-                    }
+                    box.canSee.Add(this);
                 }
-                else
+                if (box.used)
                 {
-                    if (temp.GetChild(i).GetComponent<Box>().canSee.Contains(this))
+                    if (!box.canSeeChild.Contains(this))
                     {
-                        temp.GetChild(i).GetComponent<Box>().canSee.Remove(this);
+                        box.canSeeChild.Add(this);
                     }
                 }
             }
-            else if (temp.GetChild(i).name.Split('(')[0] == "DeadBody")
+            else if (Event.name.Split('(')[0] == "DeadBody")
             {
-                if (!temp.GetChild(i).GetComponent<DeadBody>().used)
+                DeadBody deadBody = Event.GetComponent<DeadBody>();
+                if (!deadBody.canSee.Contains(this))
                 {
-                    if (!temp.GetChild(i).GetComponent<DeadBody>().canSee.Contains(this))
-                    {
-                        temp.GetChild(i).GetComponent<DeadBody>().canSee.Add(this);
-                    }
+                    deadBody.canSee.Add(this);
                 }
-                else
+                if (deadBody.used)
                 {
-                    if (temp.GetChild(i).GetComponent<DeadBody>().canSee.Contains(this))
+                    if (!deadBody.canSeeChild.Contains(this))
                     {
-                        temp.GetChild(i).GetComponent<DeadBody>().canSee.Remove(this);
+                        deadBody.canSeeChild.Add(this);
                     }
                 }
             }
-            else if(temp.GetChild(i).name.Split('(')[0] == "BlueKey" || temp.GetChild(i).name.Split('(')[0] == "RedKey")
+            else if(Event.name.Split('(')[0] == "BlueKey" || Event.name.Split('(')[0] == "RedKey")
             {
-                if (!temp.GetChild(i).GetComponent<Key>().used)
+                Key key = Event.GetComponent<Key>();
+                if (!key.canSee.Contains(this))
                 {
-                    if (!temp.GetChild(i).GetComponent<Key>().canSee.Contains(this))
-                    {
-                        temp.GetChild(i).GetComponent<Key>().canSee.Add(this);
-                    }
+                    key.canSee.Add(this);
                 }
-                else
+                if (key.used)
                 {
-                    if (temp.GetChild(i).GetComponent<Key>().canSee.Contains(this))
+                    if (!key.canSeeChild.Contains(this))
                     {
-                        temp.GetChild(i).GetComponent<Key>().canSee.Remove(this);
-                    }
-                }
-            }
-            else if (temp.GetChild(i).name.Split('(')[0] == "Treasure")
-            {
-                if (!temp.GetChild(i).GetComponent<Treasure>().used)
-                {
-                    if (!temp.GetChild(i).GetComponent<Treasure>().canSee.Contains(this))
-                    {
-                        temp.GetChild(i).GetComponent<Treasure>().canSee.Add(this);
-                    }
-                }
-                else
-                {
-                    if (temp.GetChild(i).GetComponent<Treasure>().canSee.Contains(this))
-                    {
-                        temp.GetChild(i).GetComponent<Treasure>().canSee.Remove(this);
+                        key.canSeeChild.Add(this);
                     }
                 }
             }
-            else if (temp.GetChild(i).name.Split('(')[0] == "Exit")
+            else if (Event.name.Split('(')[0] == "Treasure")
             {
-                if (!temp.GetChild(i).GetComponent<Exit>().canSee.Contains(this))
+                Treasure treasure = Event.GetComponent<Treasure>();
+                if (!treasure.canSee.Contains(this))
                 {
-                    temp.GetChild(i).GetComponent<Exit>().canSee.Add(this);
+                    treasure.canSee.Add(this);
+                }
+                if (treasure.used)
+                {
+                    if (!treasure.canSeeChild.Contains(this))
+                    {
+                        treasure.canSeeChild.Add(this);
+                    }
                 }
             }
-            else if (temp.GetChild(i).name.Split('(')[0] == "Monster")
+            else if (Event.name.Split('(')[0] == "Dereliction")
             {
-                if (!temp.GetChild(i).GetComponent<Monster>().canSee.Contains(this))
+                Dereliction rereliction = Event.GetComponent<Dereliction>();
+                if (!rereliction.canSee.Contains(this))
                 {
-                    temp.GetChild(i).GetComponent<Monster>().canSee.Add(this);
+                    rereliction.canSee.Add(this);
+                }
+                if (rereliction.used)
+                {
+                    if (!rereliction.canSeeChild.Contains(this))
+                    {
+                        rereliction.canSeeChild.Add(this);
+                    }
+                }
+            }
+            else if (Event.name.Split('(')[0] == "Exit")
+            {
+                if (!Event.GetComponent<Exit>().canSee.Contains(this))
+                {
+                    Event.GetComponent<Exit>().canSee.Add(this);
+                }
+            }
+            else if (Event.name.Split('(')[0] == "Monster")
+            {
+                if (!Event.GetComponent<Monster>().canSee.Contains(this))
+                {
+                    Event.GetComponent<Monster>().canSee.Add(this);
                 }
             }
         }
