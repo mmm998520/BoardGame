@@ -288,18 +288,18 @@ public class GameManager : MonoBehaviour
                 Event.GetComponent<DeadBody>().bullet = 0;
                 Event.GetComponent<DeadBody>().expansion = 0;
                 Event.GetComponent<DeadBody>().match = 2;
-                //三人
+                /*三人
                 Event.GetComponent<DeadBody>().bullet++;
-                //三人
+                *///三人
             }
             else if (i == 25)
             {
                 Event.GetComponent<DeadBody>().bullet = 0;
                 Event.GetComponent<DeadBody>().expansion = 0;
                 Event.GetComponent<DeadBody>().match = 1;
-                //三人
+                /*三人
                 Event.GetComponent<DeadBody>().bullet++;
-                //三人
+                 *///三人
             }
             else if (i == 26)
             {
@@ -321,13 +321,13 @@ public class GameManager : MonoBehaviour
             totalList[i].Add(Event);
         }
 
-        //三人
+        /*三人
         Event = Instantiate((GameObject)Resources.Load("Prefabs/Monster"));
         totalList[33].Add(Event);
         Event = Instantiate((GameObject)Resources.Load("Prefabs/Treasure"));
         Event.GetComponent<Treasure>().value = 35;
         totalList[33].Add(Event);
-        //三人
+        *///三人
 
         return totalList;
     }
@@ -452,7 +452,7 @@ public class GameManager : MonoBehaviour
                             players.GetChild(k).GetComponent<PlayerManager>().addCanSee(players.GetChild(k).GetComponent<PlayerManager>().pos);
                         }
                     }*/
-                    for (int k = 0; k < totalList[r].Count; k++)
+                for (int k = 0; k < totalList[r].Count; k++)
                     {
                         totalList[r][k].transform.parent = rooms[i][j].transform;
                         totalList[r][k].transform.localPosition = Vector3.zero;
@@ -500,18 +500,22 @@ public class GameManager : MonoBehaviour
         if (tempCollapse < 50 && collapse >= 50)
         {
             Debug.LogError("50");
-            Camera.main.transform.GetChild(2).GetComponent<AudioSource>().clip = (AudioClip)Resources.Load("Sound/Alarm");
-            Camera.main.transform.GetChild(2).GetComponent<AudioSource>().Play();
+            Camera.main.transform.GetChild(3).GetComponent<AudioSource>().clip = (AudioClip)Resources.Load("Sound/Alarm");
+            Camera.main.transform.GetChild(3).GetComponent<AudioSource>().Play();
         }
         if (tempCollapse < 80 && collapse >= 80)
         {
             Debug.LogError("80");
+            Camera.main.transform.GetChild(3).GetComponent<AudioSource>().clip = (AudioClip)Resources.Load("Sound/Alarm");
+            Camera.main.transform.GetChild(3).GetComponent<AudioSource>().Play();
         }
         if (tempCollapse < 100 && collapse >= 100)
         {
             GameObject.Find("Start(Clone)").transform.parent.GetComponent<Room>().collapse = 2;
             GameObject.Find("Start(Clone)").transform.parent.GetComponent<MeshRenderer>().material.color = Color.black;
             Debug.LogError("100");
+            Camera.main.transform.GetChild(3).GetComponent<AudioSource>().clip = (AudioClip)Resources.Load("Sound/Alarm");
+            Camera.main.transform.GetChild(3).GetComponent<AudioSource>().Play();
         }
     }
 

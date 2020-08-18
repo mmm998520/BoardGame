@@ -141,6 +141,10 @@ public class ButtonManager : MonoBehaviour
 
     public void collapseButton()
     {
+        if (gameManager.collapse < 100)
+        {
+            gameManager.addCollapse(15);
+        }
         for(int i = 0; i < maze.GetChild(0).childCount; i++)
         {
             maze.GetChild(0).GetChild(i).GetComponent<Room>().collapseButton = true;

@@ -327,6 +327,8 @@ public class PlayerManager : MonoBehaviour
                     {
                         Debug.LogError("died");
                         died = true;
+                        Camera.main.transform.GetChild(2).GetComponent<AudioSource>().clip = (AudioClip)Resources.Load("Sound/Hurt");
+                        Camera.main.transform.GetChild(2).GetComponent<AudioSource>().Play();
                     }
                     hurt = true;
                     break;
@@ -336,6 +338,8 @@ public class PlayerManager : MonoBehaviour
                     bullet--;
                     Debug.LogWarning("Hurt");
                     hurt = true;
+                    Camera.main.transform.GetChild(2).GetComponent<AudioSource>().clip = (AudioClip)Resources.Load("Sound/Hurt");
+                    Camera.main.transform.GetChild(2).GetComponent<AudioSource>().Play();
                 }
                 Destroy(maze.GetChild(0).GetChild(room[0] * ((MazeGen.row - 1) / 2) + room[1]).GetChild(1).gameObject);
                 gameManager.addCollapse(10);

@@ -81,19 +81,25 @@ public class Room : MonoBehaviour
                 PlayerManager playerManager = playerManagers.GetChild(i).GetComponent<PlayerManager>();
                 if (room[0] == playerManager.pos[0] && room[1] == playerManager.pos[1])
                 {
+                    
                     if (playerManager.bullet == 0)
                     {
                         if (!playerManager.died)
                         {
                             Debug.LogError(playerManagers.GetChild(i).name + " died");
                             playerManager.died = true;
+                            Camera.main.transform.GetChild(2).GetComponent<AudioSource>().clip = (AudioClip)Resources.Load("Sound/Hurt");
+                            Camera.main.transform.GetChild(2).GetComponent<AudioSource>().Play();
                         }
                     }
                     else
                     {
                         playerManager.bullet--;
                         collapse = 3;
-                        gameObject.GetComponent<MeshRenderer>().material.color = new Color(0.7f,0.7f,0.7f,1);
+                        gameObject.GetComponent<MeshRenderer>().material.color = new Color(0.55f,0.55f,0.55f,1);
+                        Camera.main.transform.GetChild(2).GetComponent<AudioSource>().clip = (AudioClip)Resources.Load("Sound/Hurt");
+                        Camera.main.transform.GetChild(2).GetComponent<AudioSource>().Play();
+                        print("a");
                     }
                 }
             }

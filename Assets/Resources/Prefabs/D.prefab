@@ -55,13 +55,14 @@ MonoBehaviour:
   bullet: 3
   match: 0
   torch: 3
-  abilityTimes: 2
+  abilityTimes: 0
   heavyBurden: 6
   restScared: 10
   forciblyRestScared: 20
   maxScared: 70
   alarmedScared: 50
   actionMax: 4
+  died: 0
 --- !u!1 &6407915943006370090
 GameObject:
   m_ObjectHideFlags: 0
